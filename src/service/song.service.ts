@@ -29,9 +29,19 @@ export class SongService {
         }
     }
 
-    async getSongs(page: number = 1, perPage: number = 2): Promise<Song[]> {
+    async getSongs(page: number = 1, name: string = ''): Promise<any> {
+        let perPage = 10;
+        if(name.length){
+            perPage = await this.songModel.count({ name: { $regex: `.*${name}.*`, $options: 'i' } })
+        }
         const skip = (page - 1) * perPage;
-        return await this.songModel.find().populate('createdBy').skip(skip)
-        .limit(perPage)
+        let data = await this.songModel.find({ name: { $regex: `.*${name}.*`, $options: 'i' } }).populate('createdBy').skip(skip).limit(perPage).exec()
+        return {
+            data: data,
+            pagesCount: name.length ? 1 : Math.ceil(await this.songModel.count()/perPage)
+        }
+    }
+    async deleteSong(song:any): Promise<any>{
+        return await this.songModel.deleteOne({ _id:song.id }).exec()
     }
 }

@@ -9,7 +9,7 @@ export class SongController {
 
     @Post('/')
     async AddSong(@Req() request, @Res() response, @Body() song: Song) {
-        if(request.user && request.user._id){
+        if(request.user && request.user._id && (request.user.roleId == 2 || request.user.roleId == 3)){
             song.createdBy = request.user._id
             const newSong = await this.songService.addSong(song);
             return response.status(HttpStatus.CREATED).json(newSong)
@@ -18,7 +18,13 @@ export class SongController {
     }
     @Get('/')
     async GetSongs(@Req() request, @Res() response) {
-        const songs = await this.songService.getSongs(request.query && request.query.page ? parseInt(request.query.page) : 1);
+        const songs = await this.songService.getSongs(request.query && request.query.page ? parseInt(request.query.page) : 1, request.query && request.query.name ? request.query.name : '');
         return response.status(HttpStatus.OK).json(songs)
+    }
+    @Delete('/')
+    async DeleteSong(@Res() response, @Body() id:any) {
+        console.log(id)
+        let res = await this.songService.deleteSong(id)
+        return response.status(HttpStatus.OK).json(res)
     }
 }
