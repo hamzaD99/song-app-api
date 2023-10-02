@@ -5,9 +5,11 @@ export class User {
     @Prop({required:true})
     name: string;
     @Prop({required:true, unique:true, lowercase:true})
-    email: string;
+    userName: string;
     @Prop({required:true})
     password: string
+    @Prop({required:true, default: 1})
+    roleId: Number
     @Prop({default: Date.now()})
     createdDate: Date
 }

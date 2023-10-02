@@ -10,7 +10,7 @@ export class Song {
     @Prop({required:true})
     singer: string;
     @Prop({required:true})
-    songLink: string;
+    link: string;
     @Prop()
     coverImage: string;
     @Prop({ default: Date.now() })

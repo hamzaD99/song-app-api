@@ -12,13 +12,14 @@ export class UserService {
     ) { }
 
     async signin(user: User, jwt: JwtService): Promise<any> {
-        const foundUser = await this.userModel.findOne({ email: user.email }).exec();
+        const foundUser = await this.userModel.findOne({ userName: user.userName }).exec();
         if (foundUser) {
-            const { password } = foundUser;
+            const { password, _id, userName, name, roleId } = foundUser;
             if (await bcrypt.compare(user.password, password)) {
-                const payload = { email: user.email };
+                const payload = { userName: user.userName };
                 return {
                     token: jwt.sign({sub: payload},{secret: secret}),
+                    user: {_id:_id,userName:userName,name:name,roleId:roleId}
                 };
             }
             return new HttpException('Incorrect username or password', HttpStatus.UNAUTHORIZED)
@@ -31,7 +32,7 @@ export class UserService {
         const hash = await bcrypt.hash(user.password, salt);
         const reqBody = {
             name: user.name,
-            email: user.email,
+            userName: user.userName,
             password: hash,
             createdDate: now()
         }
@@ -39,7 +40,7 @@ export class UserService {
         return newUser.save();
     }
 
-    async getOne(email): Promise<User> {
-        return await this.userModel.findOne({ email }).exec();
+    async getOne(userName): Promise<User> {
+        return await this.userModel.findOne({ userName }).exec();
     }
 }

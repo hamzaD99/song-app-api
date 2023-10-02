@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, UploadedFiles, Put, Req, Res } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, HttpException, Post, UploadedFiles, Put, Req, Res } from "@nestjs/common";
 import { User } from "../model/user.schema";
 import { UserService } from "../service/user.service";
 import { JwtService } from '@nestjs/jwt'
@@ -25,6 +25,7 @@ export class UserController {
 
     @Get('/g')
     async g(@Res() response) {
+        console.log("Hello from the other side")
         const token = await this.userServerice.getOne('hamzadaoud99@gmail.com')
         return response.status(HttpStatus.OK).json(token)
     }
