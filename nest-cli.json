@@ -4,5 +4,12 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true
+  },
+  "dockerCompose": {
+    "song-app-api": {
+      "file": "docker-compose.yml",
+      "service": "mongodb",
+      "env_file": ".env.dev"
+    }
   }
 }

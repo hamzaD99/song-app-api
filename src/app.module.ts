@@ -18,7 +18,7 @@ import { isAuthenticated } from "./app.middleware"
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/Stream'),
+    MongooseModule.forRoot('mongodb://mongodb:27017/Stream'),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }, {name: Song.name, schema:SongSchema}]),
     JwtModule.register({
       secret,
